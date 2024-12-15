@@ -1,5 +1,8 @@
 import Head from 'next/head';
 
+import { ComparisonButtonSection } from '@/components/comparison-group';
+import { ButtonSection } from '@/components/control-group';
+
 export default function Home() {
   return (
     <>
@@ -22,7 +25,8 @@ export default function Home() {
         className="flex min-h-screen flex-col gap-8 px-5 py-8 sm:gap-16 sm:px-12
           sm:py-16 lg:gap-24 lg:px-20 lg:py-24"
       >
-        {/* ... */}
+        <ComparisonButtonSection />
+        <ButtonSection />
       </div>
     </>
   );
