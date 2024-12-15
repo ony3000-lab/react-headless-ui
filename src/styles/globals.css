@@ -11,8 +11,7 @@
 
   body {
     color: theme('colors.black');
-    background: linear-gradient(to bottom, transparent, theme('colors.white'))
-      theme('colors.gray.300');
+    background: theme('colors.gray.200');
   }
 
   @media (prefers-color-scheme: dark) {
@@ -22,8 +21,7 @@
 
     body {
       color: theme('colors.white');
-      background: linear-gradient(to bottom, transparent, theme('colors.black'))
-        theme('colors.black');
+      background: theme('colors.gray.800');
     }
   }
 }
