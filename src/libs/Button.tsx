@@ -1,4 +1,4 @@
-import type { ComponentProps, ForwardedRef } from 'react';
+import type { ComponentProps, ForwardedRef, ReactNode } from 'react';
 import { forwardRef, createElement, useRef, useState } from 'react';
 
 type DynamicComponentProps<D extends keyof JSX.IntrinsicElements, T> = {
@@ -11,6 +11,14 @@ type DynamicComponentProps<D extends keyof JSX.IntrinsicElements, T> = {
 
 type ButtonRootVariants = {
   disabled?: boolean;
+  children?:
+    | ReactNode
+    | ((props: {
+        hover: boolean;
+        focus: boolean;
+        active: boolean;
+        disabled: boolean;
+      }) => ReactNode);
 };
 
 type ButtonRootProps<T> = Omit<
@@ -33,7 +41,7 @@ function ButtonRoot<
     onKeyUp,
     onFocus,
     onBlur,
-    children,
+    children = undefined,
     ...otherProps
   }: ButtonRootProps<T>,
   ref: ForwardedRef<unknown>,
@@ -116,7 +124,9 @@ function ButtonRoot<
       'data-active': isActive ? '' : undefined,
       'data-disabled': disabled ? '' : undefined,
     },
-    children,
+    typeof children === 'function'
+      ? children({ focus: isFocus, hover: isHover, active: isActive, disabled })
+      : children,
   );
 }
 

@@ -29,6 +29,26 @@ export function ComparisonButtonSection() {
             <Button as="a">Button</Button>
           </div>
         </div>
+        <div className="grid grid-cols-[3fr_5fr] gap-6">
+          <div>using render props</div>
+          <div>
+            <Button>
+              {({ hover, focus, active }) => (
+                <>
+                  Button (
+                  {[
+                    hover ? 'hover' : undefined,
+                    focus ? 'focus' : undefined,
+                    active ? 'active' : undefined,
+                  ]
+                    .filter(Boolean)
+                    .join(', ')}
+                  )
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
       </div>
     </section>
   );
