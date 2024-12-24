@@ -1,13 +1,11 @@
 import type { ComponentProps, ForwardedRef, ReactNode } from 'react';
 import { forwardRef, createElement, useRef, useState } from 'react';
 
-type DynamicComponentProps<D extends keyof JSX.IntrinsicElements, T> = {
+type ReactTags = keyof JSX.IntrinsicElements;
+
+type DynamicComponentProps<T extends ReactTags> = {
   as?: T;
-} & (T extends undefined
-  ? ComponentProps<D>
-  : T extends keyof JSX.IntrinsicElements
-    ? ComponentProps<T>
-    : ComponentProps<D>);
+} & ComponentProps<T>;
 
 type ButtonRootVariants = {
   disabled?: boolean;
@@ -21,15 +19,13 @@ type ButtonRootVariants = {
       }) => ReactNode);
 };
 
-type ButtonRootProps<T> = Omit<
-  DynamicComponentProps<'button', T>,
+type ButtonRootProps<T extends ReactTags> = Omit<
+  DynamicComponentProps<T>,
   keyof ButtonRootVariants
 > &
   ButtonRootVariants;
 
-function ButtonRoot<
-  T extends keyof JSX.IntrinsicElements | undefined = undefined,
->(
+function ButtonRoot<T extends ReactTags = 'button'>(
   {
     as = 'button',
     disabled = false,
@@ -131,7 +127,7 @@ function ButtonRoot<
 }
 
 export const Button = forwardRef(ButtonRoot) as <
-  T extends keyof JSX.IntrinsicElements | undefined = undefined,
+  T extends ReactTags = 'button',
 >(
   props: ButtonRootProps<T> & { ref?: ForwardedRef<unknown> },
 ) => JSX.Element;
