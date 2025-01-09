@@ -1,5 +1,6 @@
 import type { ComponentProps, ForwardedRef, ReactNode } from 'react';
 import { forwardRef, createElement, useRef, useState } from 'react';
+import { useHover } from 'react-aria';
 
 type ReactTags = keyof JSX.IntrinsicElements;
 
@@ -29,8 +30,6 @@ function ButtonRoot<T extends ReactTags = 'button'>(
   {
     as = 'button',
     disabled = false,
-    onMouseEnter,
-    onMouseLeave,
     onMouseDown,
     onMouseUp,
     onKeyDown,
@@ -42,8 +41,9 @@ function ButtonRoot<T extends ReactTags = 'button'>(
   }: ButtonRootProps<T>,
   ref: ForwardedRef<unknown>,
 ) {
+  const { hoverProps, isHovered } = useHover({});
+
   const lastInteractionRef = useRef<'keyboard' | 'mouse'>('keyboard');
-  const [isHover, setIsHover] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
   const [isActive, setIsActive] = useState(false);
 
@@ -53,18 +53,6 @@ function ButtonRoot<T extends ReactTags = 'button'>(
       ref,
       type: 'button',
       disabled,
-      onMouseEnter: (e: any) => {
-        onMouseEnter?.(e);
-        if (!disabled) {
-          setIsHover(true);
-        }
-      },
-      onMouseLeave: (e: any) => {
-        onMouseLeave?.(e);
-        if (!disabled) {
-          setIsHover(false);
-        }
-      },
       onMouseDown: (e: any) => {
         onMouseDown?.(e);
         if (!disabled) {
@@ -105,23 +93,29 @@ function ButtonRoot<T extends ReactTags = 'button'>(
         }
         lastInteractionRef.current = 'keyboard';
       },
+      ...hoverProps,
       ...otherProps,
       'data-state': disabled
         ? 'disabled'
         : [
-            isHover ? 'hover' : undefined,
+            isHovered ? 'hover' : undefined,
             isFocus ? 'focus' : undefined,
             isActive ? 'active' : undefined,
           ]
             .filter(Boolean)
             .join(' '),
-      'data-hover': isHover ? '' : undefined,
+      'data-hover': isHovered ? '' : undefined,
       'data-focus': isFocus ? '' : undefined,
       'data-active': isActive ? '' : undefined,
       'data-disabled': disabled ? '' : undefined,
     },
     typeof children === 'function'
-      ? children({ focus: isFocus, hover: isHover, active: isActive, disabled })
+      ? children({
+          focus: isFocus,
+          hover: isHovered,
+          active: isActive,
+          disabled,
+        })
       : children,
   );
 }
