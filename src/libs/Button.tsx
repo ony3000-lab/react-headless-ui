@@ -8,7 +8,7 @@ type DynamicComponentProps<T extends ReactTags> = {
   as?: T;
 } & ComponentProps<T>;
 
-type ButtonRootVariants = {
+type StaticProps = {
   disabled?: boolean;
   children?:
     | ReactNode
@@ -22,9 +22,9 @@ type ButtonRootVariants = {
 
 type ButtonRootProps<T extends ReactTags> = Omit<
   DynamicComponentProps<T>,
-  keyof ButtonRootVariants
+  keyof StaticProps
 > &
-  ButtonRootVariants;
+  StaticProps;
 
 function ButtonRoot<T extends ReactTags = 'button'>(
   {
