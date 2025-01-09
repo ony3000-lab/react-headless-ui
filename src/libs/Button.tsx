@@ -39,6 +39,16 @@ function ButtonRoot<T extends ReactTags = 'button'>(
   const { focusProps, isFocusVisible } = useFocusRing();
   const { pressProps, isPressed } = usePress({});
 
+  const renderProps = {
+    hover: !disabled && isHovered,
+    focus: !disabled && isFocusVisible,
+    active: !disabled && isPressed,
+    disabled,
+  };
+  const filteredEntries = Object.entries(renderProps).filter(
+    ([, propState]) => propState,
+  );
+
   return createElement(
     as,
     {
@@ -49,28 +59,12 @@ function ButtonRoot<T extends ReactTags = 'button'>(
       ...focusProps,
       ...pressProps,
       ...otherProps,
-      'data-state': disabled
-        ? 'disabled'
-        : [
-            isHovered ? 'hover' : undefined,
-            isFocusVisible ? 'focus' : undefined,
-            isPressed ? 'active' : undefined,
-          ]
-            .filter(Boolean)
-            .join(' '),
-      'data-hover': isHovered ? '' : undefined,
-      'data-focus': isFocusVisible ? '' : undefined,
-      'data-active': isPressed ? '' : undefined,
-      'data-disabled': disabled ? '' : undefined,
+      'data-state': filteredEntries.map(([propName]) => propName).join(' '),
+      ...Object.fromEntries(
+        filteredEntries.map(([propName]) => [`data-${propName}`, '']),
+      ),
     },
-    typeof children === 'function'
-      ? children({
-          focus: isFocusVisible,
-          hover: isHovered,
-          active: isPressed,
-          disabled,
-        })
-      : children,
+    typeof children === 'function' ? children(renderProps) : children,
   );
 }
 
