@@ -1,3 +1,6 @@
+import clsx from 'clsx';
+import { Fragment } from 'react';
+
 import { Button } from '@/libs';
 
 export function ButtonSection() {
@@ -24,7 +27,7 @@ export function ButtonSection() {
           </div>
         </div>
         <div className="grid grid-cols-[3fr_5fr] gap-6">
-          <div>as: &apos;span&apos;</div>
+          <div>as: &apos;a&apos;</div>
           <div>
             <Button as="a">Button</Button>
           </div>
@@ -45,6 +48,26 @@ export function ButtonSection() {
                     .join(', ')}
                   )
                 </>
+              )}
+            </Button>
+          </div>
+        </div>
+        <div className="grid grid-cols-[3fr_5fr] gap-6">
+          <div>as: Fragment</div>
+          <div>
+            <Button as={Fragment}>
+              {({ hover, active }) => (
+                <button
+                  type="button"
+                  className={clsx(
+                    'rounded px-4 py-2 text-sm text-white',
+                    !hover && !active && 'bg-sky-600',
+                    hover && !active && 'bg-sky-500',
+                    active && 'bg-sky-700',
+                  )}
+                >
+                  Save changes
+                </button>
               )}
             </Button>
           </div>
