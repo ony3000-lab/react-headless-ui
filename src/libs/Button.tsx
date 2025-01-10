@@ -59,7 +59,6 @@ function ButtonRoot<T extends TagsOrFragment = 'button'>(
 
   const elementProps = {
     ref,
-    type: 'button',
     disabled,
     ...hoverProps,
     ...focusProps,
@@ -74,7 +73,14 @@ function ButtonRoot<T extends TagsOrFragment = 'button'>(
     typeof children === 'function' ? children(renderProps) : children;
 
   return typeof as === 'string' ? (
-    createElement(as, elementProps, childElement)
+    createElement(
+      as,
+      {
+        type: 'button',
+        ...elementProps,
+      },
+      childElement,
+    )
   ) : (
     // eslint-disable-next-line react/jsx-fragments,react/jsx-no-useless-fragment
     <Fragment>
