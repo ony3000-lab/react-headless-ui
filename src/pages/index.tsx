@@ -1,6 +1,9 @@
 import Head from 'next/head';
 
-import { ComparisonButtonSection } from '@/components/comparison-group';
+import {
+  ComparisonButtonSection,
+  ComparisonSelectSection,
+} from '@/components/comparison-group';
 import { ButtonSection } from '@/components/control-group';
 
 export default function Home() {
@@ -27,6 +30,7 @@ export default function Home() {
       >
         <ComparisonButtonSection />
         <ButtonSection />
+        <ComparisonSelectSection />
       </div>
     </>
   );
